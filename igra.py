@@ -96,13 +96,12 @@ class Igra:
     for duhec in self.igra.duhci:
         duhec_x, duhec_y = duhec.pozicija
         zacetek = self.cas
-        barva = BARVA_CEKINA
-        #if (self.igra.obratna_igra == False or self.cas - zacetek > 10):
-        #  barva = BARVA_CEKINA
-        #elif self.cas % 6 < 4 :
-        #  barva = BARVA_BOMBONA
-        #else:
-        #  barva = '#0E0'
+        if (self.igra.obratna_igra == False):
+          barva = BARVA_CEKINA
+        elif self.cas % 29 < 15 :
+          barva = '#00E'
+        else:
+          barva = '#E00'
         self.plosca.create_oval(
           duhec_x * SKALA,
           duhec_y * SKALA,

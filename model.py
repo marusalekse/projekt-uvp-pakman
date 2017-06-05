@@ -4,6 +4,7 @@ import math
 DESNO, GOR, DOL, LEVO= 'desno', 'gor', 'dol', 'levo'
 POLJE_PRAZNO, POLJE_ZID = 0, 1
 DOLZINA_KORAKA = 0.1
+CAS_OBRNJENOSTI = 200
 
 class Pakman:
   #za pakmana dolocimo kje je in kaj je njegova smer, 
@@ -103,6 +104,8 @@ class Igra:
     self.pakman.nastavi_smer(LEVO)
     self.naslednja_smer = LEVO
     self.rezultat = 0
+    self.koraki=0
+    self.cas = 0
     self.duhci = []
     self.obratna_igra = False
     for duhec in self.povrsina.duhci:
@@ -150,14 +153,24 @@ class Igra:
     poz_x, poz_y = pozicija
     index = self.povrsina.bomboni.index((poz_x, poz_y))
     del self.povrsina.bomboni[index]
-    self.rezultat += 500
+    self.cas=self.koraki
     self.obratna_igra = True
+    self.rezultat += 500
 
   def korak(self):
     for duhec in self.duhci:
       # Preblizu AJS
-      if self.razdalja(self.pakman.pozicija, duhec.pozicija) < 1:
-        return False
+      if self.obratna_igra == True:
+        if self.razdalja(self.pakman.pozicija, duhec.pozicija) < 1:
+          duhec.pozicija = (9,9)
+      else:
+        if self.razdalja(self.pakman.pozicija, duhec.pozicija) < 1:
+          return False
+
+
+    self.koraki +=1
+    if self.koraki-self.cas > CAS_OBRNJENOSTI:
+      self.obratna_igra = False
 
     if self.celostevilske_koordinate(self.pakman.pozicija):
       if self.lahko_premakne(self.pakman.premik_kam(self.naslednja_smer)):
